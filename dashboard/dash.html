@@ -293,13 +293,31 @@
         practical: "../unit_dashboard/L1_S2_AI Principles and Applications .pdf",
         field: "../unit_dashboard/L1_S2_Field Training _U9.pdf"
       },
+
+      "10": {
+        title: "Unit 10: Digital Creativity Foundations",
+        desc: "Your first step to turning your ideas into amazing digital creations — keep learning, keep creating, and don’t be afraid to try!",
+        schoolBook: "../unit_dashboard/L1_S2_Digital Art unit 6.pdf", // تأكدي من اسم الملف
+        practical: "../unit_dashboard/L1_S2_Digital Art unit 6.pdf",
+        field: "../unit_dashboard/L1_S2_Unit10_Field.pdf"
+      },
+
       "14": {
         title: "Unit 14: Data Structure and Algorithm",
         desc: "Master the balance between Space and Time with advanced algorithms.",
         schoolBook: "../unit_dashboard/L2_Programming_S2_school Book .pdf",
         practical: "../unit_dashboard/L2_Programming_S2_practical Guide _Unit14.pdf",
         field: "../unit_dashboard/L2_Programming_S2_Unit 14 Field Training Guide.pdf"
+      },
+      
+      "15": {
+        title: "Unit 15: Advanced Programming Topics",
+        desc: "Deep dive into complex programming paradigms and software architecture.",
+        schoolBook: "../unit_dashboard/L2_Programming_S2_Unit15_School_Book.pdf", // تأكدي من اسم الملف
+        practical: "../unit_dashboard/L2_Programming_S2_Unit15_Practical.pdf",
+        field: "../unit_dashboard/L2_Programming_S2_Unit15_Field.pdf"
       }
+
 
     };
 
@@ -376,7 +394,10 @@
       document.getElementById('pdf-modal').classList.add('hidden');
       document.body.style.overflow = 'auto';
     }
- function openQuiz() {
+
+    // فتح نافذة اختيار الدرس بدل الانتقال المباشر
+    // فتح نافذة اختيار الدرس
+    function openQuiz() {
       const modal = document.getElementById('lesson-modal');
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
@@ -393,12 +414,16 @@
     // 1. تخزين رقم الدرس بالمسمى الذي يتوقعه الكويز (selectedLesson)
     localStorage.setItem('selectedLesson', lessonNum); 
     
+    // 2. التأكد من وجود البيانات التي يطلبها شرط الأمان في الكويز
+    // إذا لم تكن موجودة (مثلاً دخل الطالب للداشبورد مباشرة)، سنضع قيم افتراضية
     if(!localStorage.getItem('selectedGrade')) localStorage.setItem('selectedGrade', 'Grade 2');
     if(!localStorage.getItem('selectedSpecialty')) localStorage.setItem('selectedSpecialty', 'Programming');
 
+    // 3. تخزين النطاق (اختياري لأن الكويز الجديد يحسبه تلقائياً)
     const range = { start: (lessonNum - 1) * 50, end: lessonNum * 50 };
     localStorage.setItem('questionRange', JSON.stringify(range));
 
+    // 4. مسح بيانات الامتحان القديم لضمان بداية جديدة
     localStorage.removeItem('exam_ans_storage');
     localStorage.removeItem('exam_questions_storage');
 
