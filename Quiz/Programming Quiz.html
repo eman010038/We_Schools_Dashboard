@@ -11,12 +11,20 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
+      
+        @media (min-width: 768px) {
+            body {
+                padding-top: 100px;
+                /* للشاشات الكبيرة */
+            }
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8faff;
             user-select: none;
-            padding-top: 100px;
             padding-bottom: 120px;
+            padding-top: 130px;
         }
 
         .we-purple {
@@ -138,7 +146,6 @@
         .access-denied-bg {
             background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
         }
-        
     </style>
 </head>
 
@@ -146,21 +153,35 @@
 
     <div id="toast" class="toast bg-slate-800 font-bold"></div>
 
-    <header
-        class="fixed top-0 w-full h-[80px] z-50 bg-white/90 backdrop-blur-xl shadow-sm flex justify-between items-center px-8 border-b border-gray-100">
-        <div class="flex items-center gap-4">
-            <img src="../Galaxy Academy for Development.png" alt="Galaxy" class="h-[45px]">
-            <div class="h-8 w-[1px] bg-gray-200"></div>
-            <img src="../WE Schools for Applied Technology.png" alt="WE" class="h-[45px]">
-        </div>
+    <header class="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+        <div
+            class="max-w-7xl mx-auto px-4 h-auto md:h-[80px] flex flex-col md:flex-row justify-between items-center py-2 md:py-0 gap-3">
 
-        <div class="text-center">
-            <h1 id="timer-display" class="text-2xl text-red-600 font-black">10:00</h1>
-            <p id="progress-text" class="text-xs font-bold text-gray-500">Answered: 0/20</p>
-        </div>
+            <div class="flex items-center gap-2 md:gap-4 flex-row-reverse overflow-x-auto no-scrollbar max-w-full">
+                <img src="../Ministry.png" alt="Ministry" class="h-[30px] md:h-[40px] w-auto object-contain">
+                <div class="h-4 w-[1px] bg-gray-200 hidden md:block"></div>
+                <img src="../pplied Technology.png" alt="Applied Tech"
+                    class="h-[30px] md:h-[40px] w-auto object-contain">
+                <div class="h-4 w-[1px] bg-gray-200 hidden md:block"></div>
+                <img src="../WE Schools for Applied Technology.png" alt="WE Schools"
+                    class="h-[30px] md:h-[40px] w-auto object-contain">
+                <div class="h-4 w-[1px] bg-gray-200 hidden md:block"></div>
+                <img src="../Galaxy Academy for Development.png" alt="Galaxy Academy"
+                    class="h-[30px] md:h-[40px] w-auto object-contain">
+            </div>
 
-        <div class="flex items-center">
-               <span class="we-purple font-black text-lg">QUIZ MODE</span>
+            <div class="flex items-center gap-4">
+                <div class="text-center bg-gray-50 px-3 py-1 rounded-xl border border-gray-100 shadow-sm min-w-[100px]">
+                    <h1 id="timer-display"
+                        class="text-lg md:text-2xl text-red-600 font-black tabular-nums leading-none">10:00</h1>
+                    <p id="progress-text"
+                        class="text-[8px] md:text-[10px] font-bold text-gray-500 uppercase tracking-tighter">0/20</p>
+                </div>
+
+                <div class="hidden sm:flex items-center">
+                    <span class="text-[#7A2F8C] font-black text-xs md:text-sm uppercase">Quiz Mode</span>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -221,10 +242,10 @@
             if (!examFinished) return "Are you sure you want to leave the exam?";
         };
 
-       function initExam() {
+        function initExam() {
             const unitNum = localStorage.getItem('unitNumber');
             const lessonNum = localStorage.getItem('selectedLesson');
-            
+
             if (!unitNum || !lessonNum) {
                 alert("Please select the unit and lesson from the homepage");
                 window.location.href = "../index.html";
@@ -232,15 +253,15 @@
             }
 
             const script = document.createElement('script');
-            script.src = `./unit${unitNum}.js`; 
-            
-            script.onload = function() {
+            script.src = `./unit${unitNum}.js`;
+
+            script.onload = function () {
                 try {
                     if (typeof allQuestionsData === 'undefined') {
                         throw new Error("Questions file loaded but data is missing.");
                     }
 
-                    unitsQuestions = allQuestionsData; 
+                    unitsQuestions = allQuestionsData;
                     const range = LESSON_RANGES[lessonNum] || LESSON_RANGES[1];
                     let pool = unitsQuestions.slice(range.start, range.end);
 
@@ -257,7 +278,7 @@
 
                     const essayPool = getUniqueQuestions('essay');
                     const objectivePool = pool.filter(q => q.type !== 'essay');
-                    
+
                     const uniqueObjectiveMap = new Map();
                     objectivePool.forEach(item => uniqueObjectiveMap.set(item.q, item));
                     const uniqueObjectivePool = shuffle(Array.from(uniqueObjectiveMap.values()));
@@ -277,7 +298,7 @@
                 }
             };
 
-            script.onerror = function() {
+            script.onerror = function () {
                 showErrorUI(unitNum);
             };
 
@@ -285,7 +306,7 @@
         }
 
         function showErrorUI(num) {
-            document.getElementById('quiz-container').innerHTML = 
+            document.getElementById('quiz-container').innerHTML =
                 `<div class='text-center p-10 bg-red-50 rounded-2xl border-2 border-red-200'>
                     <p class='font-bold text-red-500'>⚠️ Error Loading Questions</p>
                     <p class='text-sm text-gray-500'>Could not find file: unit${num}</p>
@@ -365,34 +386,116 @@
             if (confirm("Are you sure you want to submit? You won't be able to change answers.")) submitQuiz();
         }
 
-        function submitQuiz() {
+        const GEMINI_API_KEY = "AIzaSyBBASiBIRkmubcB6A7ufrrcG75hhd7SUck";
+        // 1. استبدلي مفتاح الـ API الخاص بك هنا
+        async function submitQuiz() {
             if (examFinished) return;
             examFinished = true;
             clearInterval(timerInterval);
 
+            // إظهار رسالة "جاري التصحيح"
+            showToast("⏳ AI is grading your essay answers... Please wait.", "bg-blue-600");
+            document.getElementById('main-submit-btn').disabled = true;
+            document.getElementById('main-submit-btn').innerText = "Grading...";
+
             let totalEarned = 0;
             let maxPoints = 0;
 
-            currentSubset.forEach((q, i) => {
+            // سنقوم بمعالجة كل سؤال
+            for (let i = 0; i < currentSubset.length; i++) {
+                const q = currentSubset[i];
                 const userVal = q.userAns || "";
                 const fullPts = POINT_SYSTEM[q.type];
                 maxPoints += fullPts;
                 let score = 0;
 
-                if (q.type === 'essay') {
-                    score = calculateEssayScore(userVal, q.a, q.syns || {}, fullPts);
+                if (q.type === 'essay' && userVal.trim() !== "") {
+                    // تصحيح بالذكاء الاصطناعي
+                    score = await getAIScore(userVal, q.a, fullPts);
+                } else if (q.type === 'essay' && userVal.trim() === "") {
+                    score = 0;
                 } else {
-                    score = (userVal.toLowerCase() === q.a.toLowerCase()) ? fullPts : 0;
+                    // تصحيح تلقائي للـ MCQ و T/F
+                    score = (userVal.toLowerCase().trim() === q.a.toLowerCase().trim()) ? fullPts : 0;
                 }
 
-                totalEarned += score;
+                totalEarned += parseFloat(score);
                 styleFeedback(i, score, fullPts, q.a);
-            });
+            }
 
-            document.getElementById('final-score-points').innerText = `${totalEarned} / ${maxPoints}`;
+            // إظهار النتيجة النهائية
+            document.getElementById('final-score-points').innerText = `${totalEarned.toFixed(2)} / ${maxPoints}`;
             document.getElementById('result-modal').classList.remove('hidden');
             window.scrollTo(0, 0);
         }
+
+        async function getAIScore(userAnswer, correctAnswer, maxPoints) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+            const prompt = `
+                You are a professional teacher grading a student's answer.
+                Correct Answer: "${correctAnswer}"
+                Student Answer: "${userAnswer}"
+                Max Points: ${maxPoints}
+                
+                Rules:
+                1. Compare the meaning, not just the exact words. 
+                2. If the student has small spelling mistakes but the meaning is clear, don't deduct points.
+                3. If the answer is partially correct, give a partial score (e.g., 0.5 or 0.75).
+                4. Return ONLY a single number representing the score. No text, no explanation.
+            `;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+                const data = await response.json();
+                const aiResponse = data.candidates[0].content.parts[0].text.trim();
+                const score = parseFloat(aiResponse);
+                return isNaN(score) ? 0 : Math.min(score, maxPoints);
+            } catch (error) {
+                console.error("AI Error:", error);
+                // Fallback: لو الـ AI فشل، نستخدم الطريقة القديمة البسيطة
+                return calculateFallbackScore(userAnswer, correctAnswer, maxPoints);
+            }
+        }
+
+        // دالة احتياطية في حال انقطاع الإنترنت أو فشل الـ AI
+        function calculateFallbackScore(user, correct, max) {
+            let u = user.toLowerCase().trim();
+            let c = correct.toLowerCase().trim();
+            if (u === c) return max;
+            let intersect = u.split(' ').filter(w => c.includes(w)).length;
+            let ratio = intersect / c.split(' ').length;
+            if (ratio >= 0.8) return max;
+            if (ratio >= 0.4) return max * 0.5;
+            return 0;
+        }
+
+        // تعديل بسيط على دالة الاستايل عشان تقبل الكسور
+        function styleFeedback(i, score, full, correctA) {
+            const block = document.getElementById(`q-block-${i}`);
+            const err = document.getElementById(`err-${i}`);
+            const ptsLabel = document.getElementById(`pts-${i}`);
+
+            if (score >= full) {
+                block.classList.add('correct-card');
+            } else if (score > 0) {
+                block.classList.add('partial-card');
+                ptsLabel.innerText = `Earned: ${score} / ${full}`; // إظهار الدرجة الجزئية
+            } else {
+                block.classList.add('wrong-card');
+            }
+
+            err.innerHTML = `<b>Correct Answer:</b> ${correctA}`;
+            err.classList.remove('hidden');
+            block.querySelectorAll('button, textarea').forEach(el => el.disabled = true);
+        }
+
 
         function calculateEssayScore(user, correct, syns, max) {
             if (!user) return 0;
@@ -406,29 +509,17 @@
             return 0;
         }
 
-        function styleFeedback(i, score, full, correctA) {
-            const block = document.getElementById(`q-block-${i}`);
-            const err = document.getElementById(`err-${i}`);
-
-            if (score === full) block.classList.add('correct-card');
-            else if (score > 0) block.classList.add('partial-card');
-            else block.classList.add('wrong-card');
-
-            err.innerHTML = `<b>Correct Answer:</b> ${correctA}`;
-            err.classList.remove('hidden');
-            block.querySelectorAll('button, textarea').forEach(el => el.disabled = true);
-        }
-
         function reviewOnly() {
             document.getElementById('result-modal').classList.add('hidden');
         }
-       function showToast(msg, bgColor) {
+        function showToast(msg, bgColor) {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
             toast.className = `toast font-bold ${bgColor}`;
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 3000);
         }
+        // الحماية من تبديل التاب
         window.addEventListener('blur', () => {
             if (examFinished) return;
             tabSwitchCount++;
