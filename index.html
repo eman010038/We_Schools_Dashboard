@@ -213,7 +213,7 @@
         // --- منطق التطبيق الرئيسي ---
 
         function startJourney() {
-    localStorage.clear(); // هذا السطر سيضمن أن كل الاختيارات القديمة اتمسحت تماماً
+    localStorage.clear(); 
     ui.launchContainer.style.display = 'none';
     showSection('grade-section');
     smoothScroll(document.getElementById('grade-section'));
@@ -253,10 +253,27 @@
             ui.unitsGrid.innerHTML = '';
 
             const unitsMap = {
-                "1_general_2": [{ num: 9, name: 'Unit 9' }],
-                "2_prog_2": [{ num: 14, name: 'Unit 14' }],
-                "2_net_2": [{ num: 14, name: 'Unit 14' }],
-                "2_tele_2": [{ num: 14, name: 'Unit 14' }]
+                "1_general_2":
+                 [
+                    { num: 9, name: 'Unit 9' },
+                    { num: 10, name: 'Unit 10'}
+                ],
+
+                "2_prog_2":
+                [{ num: 14, name: 'Unit 14' },
+                { num: 15, name: 'Unit 15' }
+                ],
+
+
+                "2_net_2":
+                [
+                    { num: 14, name: 'Unit 14' }
+                ],
+
+                "2_tele_2":
+                [
+                    { num: 14, name: 'Unit 14' }
+                ]
             };
 
             const searchKey = `${currentGrade}_${currentSpec}_${val}`;
